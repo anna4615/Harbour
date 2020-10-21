@@ -15,7 +15,11 @@ namespace Harbour
         }
         public override string ToString()
         {
-            return $"Motorbåt\t{IdNumber}\t{Weight}\t{MaximumSpeed}\tHästkrafter: {Power}     \tStannar {DaysInHarbour} dagar";
+            return $"Motorbåt\t{IdNumber}\t{Weight}\t{MaximumSpeed}\tHästkrafter: {Power}   \tStannar {DaysInHarbour} dagar";
+        }
+        public override string TextToFile()
+        {
+            return $"Motorbåt;" + base.TextToFile();
         }
     }
 

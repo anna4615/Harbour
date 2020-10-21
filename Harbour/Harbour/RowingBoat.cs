@@ -18,5 +18,10 @@ namespace Harbour
         {
             return $"Roddbåt\t\t{IdNumber}\t{Weight}\t{MaximumSpeed}\tMax antal pers: {MaximumPassengers}\tStannar {DaysInHarbour} dagar";
         }
+
+        public override string TextToFile()
+        {
+            return $"Roddbåt;" + base.TextToFile();
+        }
     }
 }

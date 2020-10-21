@@ -12,13 +12,13 @@ namespace Harbour
 
         public Boat(int weight, int maxSpeed, int daysInHarbour)
         {
-            //IdNumber = GenerateID();
             Weight = weight;
             MaximumSpeed = maxSpeed;
             DaysInHarbour = daysInHarbour;
         }
 
         static Random r = new Random();
+
         public virtual string GenerateID()
         {
             string id = "";
@@ -31,6 +31,11 @@ namespace Harbour
             }
 
             return id;
+        }
+
+        public virtual string TextToFile()
+        {
+            return $"{IdNumber};{Weight};{MaximumSpeed}";
         }
     }
 }

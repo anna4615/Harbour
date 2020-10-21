@@ -17,6 +17,10 @@ namespace Harbour
         {
             return $"Lastfartyg\t{IdNumber}\t{Weight}\t{MaximumSpeed}\tContainers: {Containers}   \tStannar {DaysInHarbour} dagar";
         }
+        public override string TextToFile()
+        {
+            return $"Lastfartyg;" + base.TextToFile();
+        }
     }
 }
     

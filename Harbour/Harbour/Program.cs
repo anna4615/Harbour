@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace Harbour
 {
@@ -9,11 +10,33 @@ namespace Harbour
 
         static void Main(string[] args)
         {
+            string fileText = File.ReadAllText("BoatsInHarbour.txt");
+            Console.WriteLine(fileText);
+
             Boat[,] harbour = new Boat[64, 2];
             List<Boat> boats = new List<Boat>();
             int newBoats = 5;
+            StreamWriter sw = new StreamWriter("BoatsInHarbour.txt", false);
 
             AddBoatsToList(boats, newBoats);
+            SaveToFile(sw, boats);
+
+            fileText = File.ReadAllText("BoatsInHarbour.txt");
+            Console.WriteLine(fileText);
+
+            foreach (var boat in boats)
+            {
+                Console.WriteLine(boat.ToString());
+            }
+        }
+
+        private static void SaveToFile(StreamWriter sw, List<Boat> boats)
+        {
+            foreach (var boat in boats)
+            {
+                sw.WriteLine(boat.TextToFile());
+            }
+            sw.Close();
         }
 
         private static void AddBoatsToList(List<Boat> boats, int newBoats)
@@ -38,10 +61,7 @@ namespace Harbour
                         break;
                 }
             }
-            foreach (var boat in boats)
-            {
-                Console.WriteLine(boat.ToString());
-            }
+
         }
 
         private static void CreateRowingBoat(List<Boat> boats)
