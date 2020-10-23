@@ -7,25 +7,25 @@ namespace Harbour
         public string IdNumber { get; set; }
         public int Weight { get; set; }
         public int MaximumSpeed { get; set; }
-        public int DaysInHarbour { get; set; }
+        public int DaysStaying { get; set; }
+        public int DaysSinceArrival { get; set; }
 
-
-        public Boat(int weight, int maxSpeed, int daysInHarbour)
+        public Boat(int weight, int maxSpeed, int daysStaying, int daysSinceArrival)
         {
             Weight = weight;
             MaximumSpeed = maxSpeed;
-            DaysInHarbour = daysInHarbour;
+            DaysStaying = daysStaying;
+            DaysSinceArrival = daysSinceArrival;
         }
 
-        static Random r = new Random();
-
+        
         public virtual string GenerateID()
         {
             string id = "";
 
             for (int i = 0; i < 3; i++)
             {
-                int number = r.Next(26);
+                int number = Utils.r.Next(26);
                 char c = (char)('A' + number);
                 id += c;
             }
@@ -33,9 +33,9 @@ namespace Harbour
             return id;
         }
 
-        public virtual string TextToFile()
+        public virtual string TextToFile(int index)
         {
-            return $"{IdNumber};{Weight};{MaximumSpeed}";
+            return $"{index};{IdNumber};{Weight};{MaximumSpeed};";
         }
     }
 }
