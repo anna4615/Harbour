@@ -17,8 +17,7 @@ namespace Harbour
 
         public override string ToString()
         {
-            return $"{Type}\t{IdNumber}\t{Weight}\t{MaximumSpeed}\tLängd: {Length}       " +
-                $"\tDagar i hamn: {DaysSinceArrival}\tStannar {DaysStaying} dagar";
+            return $"{Type}\t{IdNumber}\t{Weight}\t{Program.ConvertToKmPerHour(MaximumSpeed)}\t\tLängd:\t\t{Length} meter";
         }
         public override string TextToFile(int index)
         {
@@ -57,7 +56,7 @@ namespace Harbour
                 var q1 = harbour
                     .FirstOrDefault(h => h.ParkedBoats.Count == 0
                     && h.SpaceId > 0
-                    && h.SpaceId < harbour.Length - 3
+                    && h.SpaceId < harbour.Length - 2
                     && harbour[h.SpaceId + 1].ParkedBoats.Count == 0
                     && harbour[h.SpaceId + 2].ParkedBoats.Count > 0);
 
@@ -73,7 +72,7 @@ namespace Harbour
             {
                 var q2 = harbour
                    .FirstOrDefault(h => h.ParkedBoats.Count == 0
-                   && h.SpaceId < harbour.Length - 2
+                   && h.SpaceId < harbour.Length - 1
                    && harbour[h.SpaceId + 1].ParkedBoats.Count == 0);
 
                 if (q2 != null)

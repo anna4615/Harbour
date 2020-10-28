@@ -15,12 +15,9 @@ namespace Harbour
             MaximumPassengers = maxPassengers;
         }
 
-
-
         public override string ToString()
         {
-            return $"{Type}\t\t{IdNumber}\t{Weight}\t{MaximumSpeed}\tMax antal pers: {MaximumPassengers}" +
-                $"\tDagar i hamn: {DaysSinceArrival}\tStannar {DaysStaying} dagar";
+            return $"{Type}\t\t{IdNumber}\t{Weight}\t{Program.ConvertToKmPerHour(MaximumSpeed)}\t\tKapacitet:\t{MaximumPassengers} personer";
         }
 
         public override string TextToFile(int index)

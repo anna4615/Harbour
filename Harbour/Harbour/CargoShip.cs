@@ -16,8 +16,7 @@ namespace Harbour
         }
         public override string ToString()
         {
-            return $"{Type}\t{IdNumber}\t{Weight}\t{MaximumSpeed}\tContainers: {Containers}   " +
-                $"\tDagar i hamn: {DaysSinceArrival}\tStannar {DaysStaying} dagar";
+            return $"{Type}\t{IdNumber}\t{Weight}\t{Program.ConvertToKmPerHour(MaximumSpeed)}\t\tContainers:\t{Containers} stycken";
         }
         public override string TextToFile(int index)
         {
@@ -57,7 +56,7 @@ namespace Harbour
             {
                 var q1 = harbour
                     .FirstOrDefault(h => h.ParkedBoats.Count == 0
-                    && h.SpaceId < harbour.Length - 5
+                    && h.SpaceId < harbour.Length - 4
                     && harbour[h.SpaceId + 1].ParkedBoats.Count == 0
                     && harbour[h.SpaceId + 2].ParkedBoats.Count == 0
                     && harbour[h.SpaceId + 3].ParkedBoats.Count == 0
@@ -70,11 +69,12 @@ namespace Harbour
                 }
             }
 
+            // Annars ta första fyra lediga intill varandra
             if (spaceFound == false)
             {
                 var q2 = harbour
                    .FirstOrDefault(h => h.ParkedBoats.Count == 0
-                   && h.SpaceId < harbour.Length - 4
+                   && h.SpaceId < harbour.Length - 3
                    && harbour[h.SpaceId + 1].ParkedBoats.Count == 0
                    && harbour[h.SpaceId + 2].ParkedBoats.Count == 0
                    && harbour[h.SpaceId + 3].ParkedBoats.Count == 0);

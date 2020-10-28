@@ -18,8 +18,7 @@ namespace Harbour
 
         public override string ToString()
         {
-            return $"{Type}\t{IdNumber}\t{Weight}\t{MaximumSpeed}\tHästkrafter: {Power}   " +
-                $"\tDagar i hamn: {DaysSinceArrival}\tStannar {DaysStaying} dagar";
+            return $"{Type}\t{IdNumber}\t{Weight}\t{Program.ConvertToKmPerHour(MaximumSpeed)}\t\tMotoreffekt:\t{Power} hästkrafter";
         }
         public override string TextToFile(int index)
         {

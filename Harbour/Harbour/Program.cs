@@ -14,14 +14,14 @@ namespace Harbour
 
             var fileText = File.ReadLines("BoatsInHarbour.txt", System.Text.Encoding.UTF7);
 
-            Console.WriteLine("Text från fil");
-            foreach (var line in fileText)
-            {
-                Console.WriteLine(line);
-            }
-            Console.WriteLine();
+            //Console.WriteLine("Text från fil");
+            //foreach (var line in fileText)
+            //{
+            //    Console.WriteLine(line);
+            //}
+            //Console.WriteLine();
 
-            HarbourSpace[] harbour = new HarbourSpace[20];
+            HarbourSpace[] harbour = new HarbourSpace[64];
 
             for (int i = 0; i < harbour.Length; i++)
             {
@@ -30,7 +30,7 @@ namespace Harbour
 
             AddBoatsFromFileToHarbour(fileText, harbour);
 
-            Console.WriteLine("Båtar i hamn från fil");
+            Console.WriteLine("Båtar i hamn efter uppstart\n");
             Console.WriteLine(PrintHarbour(harbour));
             Console.WriteLine();
 
@@ -48,7 +48,7 @@ namespace Harbour
                     boatRemoved = RemoveBoats(harbour);
                 }
 
-                Console.WriteLine("Båtar i hamn efter remove");
+                Console.WriteLine("Båtar i hamn efter dagens avfärder");
                 Console.WriteLine(PrintHarbour(harbour));
                 Console.WriteLine();
 
@@ -58,18 +58,18 @@ namespace Harbour
                 int rejectedCargoShips = 0;
 
                 List<Boat> arrivingBoats = new List<Boat>();
-                int NumberOfArrivingBoats = 5;
+                int NumberOfArrivingBoats = 10;
 
-                /*CreateNewBoats(arrivingBoats, NumberOfArrivingBoats);*/ // Tar bor tillfälligt, för att kunna styra vilka båtar som läggs till
+                CreateNewBoats(arrivingBoats, NumberOfArrivingBoats); // Tar bor tillfälligt, för att kunna styra vilka båtar som läggs till
 
                 // Skapar båtar för test, ta bort sedan
-                arrivingBoats.Add(new MotorBoat("M-" + Boat.GenerateID(), 10, 2, 3, 0, 4));
-                arrivingBoats.Add(new RowingBoat("R-" + Boat.GenerateID(), 10, 2, 1, 0, 4));
-                arrivingBoats.Add(new SailingBoat("S-" + Boat.GenerateID(), 10, 2, 4, 0, 4));
-                arrivingBoats.Add(new CargoShip("L-" + Boat.GenerateID(), 10, 2, 6, 0, 4));
-                arrivingBoats.Add(new RowingBoat("R-" + Boat.GenerateID(), 10, 2, 1, 0, 4));
+                //arrivingBoats.Add(new MotorBoat("M-" + Boat.GenerateID(), 10, 2, 3, 0, 4));
+                //arrivingBoats.Add(new RowingBoat("R-" + Boat.GenerateID(), 10, 2, 1, 0, 4));
+                //arrivingBoats.Add(new SailingBoat("S-" + Boat.GenerateID(), 10, 2, 4, 0, 4));
+                //arrivingBoats.Add(new CargoShip("L-" + Boat.GenerateID(), 10, 2, 6, 0, 4));
+                //arrivingBoats.Add(new RowingBoat("R-" + Boat.GenerateID(), 10, 2, 1, 0, 4));
 
-                Console.WriteLine("Nya båtar");
+                Console.WriteLine("Anländande båtar");
                 foreach (var boat in arrivingBoats)  //Kontroll, ta bort sedan
                 {
                     Console.WriteLine(boat.ToString());
@@ -87,7 +87,6 @@ namespace Harbour
 
                         if (spaceFound)
                         {
-                            //HarbourSpace.AddBoatToHarbour(boat, harbour, harbourPosition);
                             harbour[harbourPosition].ParkedBoats.Add(boat);
                         }
                         else
@@ -102,7 +101,6 @@ namespace Harbour
 
                         if (spaceFound)
                         {
-                            //HarbourSpace.AddBoatToHarbour(boat, harbour, harbourPosition);
                             harbour[harbourPosition].ParkedBoats.Add(boat); // om harbpos är 1 och harbourpos[0] är tom hamnar båten både på 0 och 1!!!!
                         }
                         else
@@ -117,7 +115,6 @@ namespace Harbour
 
                         if (spaceFound)
                         {
-                            //HarbourSpace.AddBoatToHarbour(boat, harbour, harbourPosition);
                             harbour[harbourPosition].ParkedBoats.Add(boat);
                             harbour[harbourPosition + 1].ParkedBoats = harbour[harbourPosition].ParkedBoats;
                         }
@@ -134,10 +131,6 @@ namespace Harbour
 
                         if (spaceFound)
                         {
-                            //HarbourSpace.AddBoatToHarbour(boat, harbour, harbourPosition);
-                            //HarbourSpace.AddBoatToHarbour(boat, harbour, harbourPosition + 1);
-                            //HarbourSpace.AddBoatToHarbour(boat, harbour, harbourPosition + 2);
-                            //HarbourSpace.AddBoatToHarbour(boat, harbour, harbourPosition + 3);
                             harbour[harbourPosition].ParkedBoats.Add(boat);
                             harbour[harbourPosition + 1].ParkedBoats = harbour[harbourPosition].ParkedBoats;
                             harbour[harbourPosition + 2].ParkedBoats = harbour[harbourPosition].ParkedBoats;
@@ -151,8 +144,8 @@ namespace Harbour
                     }
                 }
 
-                Console.WriteLine("Båtar i hamn efter nya båtar lagts till:");
-                Console.WriteLine(PrintHarbour(harbour));
+                Console.WriteLine("Båtar i hamn vid dagens slut:");
+                Console.WriteLine(PrintHarbour2(harbour));
                 Console.WriteLine();
 
                 boatsInHarbour = GenerateBoatsInHarbourList(harbour);
@@ -174,10 +167,12 @@ namespace Harbour
 
                 goToNextDay = input == "j";
 
+                Console.WriteLine();
+                Console.WriteLine();
             }
 
 
-            StreamWriter sw = new StreamWriter("BoatsInHarbour.txt", false, System.Text.Encoding.UTF7); // Kolla om gamla försvinner
+            StreamWriter sw = new StreamWriter("BoatsInHarbour.txt", false, System.Text.Encoding.UTF7);
 
             SaveToFile(sw, harbour);
             sw.Close();
@@ -188,15 +183,15 @@ namespace Harbour
             int rejectedRowingBoats, int rejectedMotorBoats, int rejectedSailingBoats, int rejectedCargoShips)
         {
             return $"Statistik\n---------\n" +
-                $"Total båtvikt i hamn: {sumOfWeight} kg\n" +
-                $"Medeltal av maxhastighet: {ConvertToKmPerHour(averageSpeed)} km/h\n" +
-                $"Lediga platser: {availableSpaces} st\n" +
+                $"Total båtvikt i hamn:\t{sumOfWeight} kg\n" +
+                $"Medel av maxhastighet:\t{ConvertToKmPerHour(averageSpeed)} km/h\n" +
+                $"Lediga platser:\t\t{availableSpaces} st\n\n" +
                 $"Avvisade båtar:\n" +
-                $"\tRoddbåtar {rejectedRowingBoats} st\n" +
-                $"\tMotorbåtar {rejectedMotorBoats} st\n" +
-                $"\tSegelbåtar {rejectedSailingBoats} st\n" +
-                $"\tLastfartyg {rejectedCargoShips} st\n" +
-                $"\tTotalt: {rejectedRowingBoats + rejectedMotorBoats + rejectedSailingBoats + rejectedCargoShips}";
+                $"\tRoddbåtar\t{rejectedRowingBoats} st\n" +
+                $"\tMotorbåtar\t{rejectedMotorBoats} st\n" +
+                $"\tSegelbåtar\t{rejectedSailingBoats} st\n" +
+                $"\tLastfartyg\t{rejectedCargoShips} st\n" +
+                $"\tTotalt\t\t{rejectedRowingBoats + rejectedMotorBoats + rejectedSailingBoats + rejectedCargoShips} st";
         }
 
         private static int CountAvailableSpaces(HarbourSpace[] harbour)
@@ -222,7 +217,7 @@ namespace Harbour
                 .Select(b => b.MaximumSpeed)
                 .Average();
 
-            return Math.Round(q); //lägg till antal decimaler
+            return q;
         }
 
         private static string GnerateSummaryOfBoats(List<Boat> boatsInHarbour)
@@ -230,11 +225,14 @@ namespace Harbour
             string summaryOfBoats = "Båtar i hamn\n------------\n";
 
             var q = boatsInHarbour
-                    .GroupBy(b => b.Type);
+                    .GroupBy(b => b.Type)
+                    .OrderBy(g => g.Key);
+
             foreach (var group in q)
             {
-                summaryOfBoats += $"{group.Key}: {group.Count()} st\n"; // Gör Enum av båtar för att kunna sortera båtarna
+                summaryOfBoats += $"{group.Key}:\t{group.Count()} st\n";
             }
+
             return summaryOfBoats;
         }
 
@@ -275,7 +273,7 @@ namespace Harbour
             {
                 foreach (var boat in space.ParkedBoats)
                 {
-                    allCopies.Add(boat);
+                    allCopies.Add(boat); // Innehåller kopior
                 }
             }
 
@@ -302,19 +300,57 @@ namespace Harbour
                 boat.DaysSinceArrival++;
             }
         }
-
         private static string PrintHarbour(HarbourSpace[] harbour)
         {
-            string text = "";
+            string text = "Båtplats\tBåttyp\t\tID\tVikt (kg)\tMaxhastighet (km/h)\tÖvrigt\n" +
+                          "----------\t----------\t-----\t---------\t-------------------\t------------------------------\n";
 
             foreach (var space in harbour)
             {
+                if (space.ParkedBoats.Count() == 0)
+                {
+                    text += $"{space.SpaceId}  Ledigt\n";
+                }
                 foreach (var boat in space.ParkedBoats)
                 {
-                    text += $"{space.SpaceId}\t{boat}\n";
+                    text += $"{space.SpaceId}\t\t{boat}\n";
                 }
             }
 
+            return text;
+        }
+        private static string PrintHarbour2(HarbourSpace[] harbour)
+        {
+            string text = "Båtplats\tBåttyp\t\tID\tVikt\tMaxhastighet\tÖvrigt\n" +
+                          "        \t      \t\t  \t(kg)\t(km/h)\n" +
+                          "--------\t----------\t-----\t-----\t------------\t------------------------------\n";
+
+            foreach (var space in harbour)
+            {
+                if (space.ParkedBoats.Count() == 0)
+                {
+                    text += $"   {space.SpaceId}  Ledigt\n";
+                }
+                foreach (var boat in space.ParkedBoats)
+                {
+                    if (space.SpaceId > 0 && harbour[space.SpaceId - 1].ParkedBoats.Contains(boat))
+                    {
+                        if (boat is SailingBoat)
+                        {
+                            text += $"   {space.SpaceId}\t\t||||||||\n";
+
+                        }
+                        if (boat is CargoShip)
+                        {
+                            text += $"   {space.SpaceId}\t\t||||||||||\n";
+                        }
+                    }
+                    else
+                    {
+                        text += $"   {space.SpaceId}\t\t{boat}\n";
+                    }
+                }
+            }
             return text;
         }
 
@@ -378,9 +414,9 @@ namespace Harbour
             }
         }
 
-        private static double ConvertToKmPerHour(double knot)
+        public static double ConvertToKmPerHour(double knot)
         {
-            return Math.Round(knot * 1.852, 1);
+            return Math.Round(knot * 1.852, 0);
         }
 
         private static void SaveToFile(StreamWriter sw, HarbourSpace[] harbour)
