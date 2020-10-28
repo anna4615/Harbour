@@ -4,6 +4,7 @@ namespace Harbour
 {
     class Boat
     {
+        public string Type { get; set; }
         public string IdNumber { get; set; }
         public int Weight { get; set; }
         public int MaximumSpeed { get; set; }
@@ -19,7 +20,7 @@ namespace Harbour
         }
 
         
-        public virtual string GenerateID()
+        public static string GenerateID()
         {
             string id = "";
 
