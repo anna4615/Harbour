@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Harbour
@@ -17,12 +18,13 @@ namespace Harbour
 
         public override string ToString()
         {
-            return $"{Type}\t\t{IdNumber}\t{Weight}\t{Program.ConvertToKmPerHour(MaximumSpeed)}\t\tKapacitet:\t{MaximumPassengers} personer";
+            return $"{Type}\t\t{IdNumber}\t{Weight}\t{Math.Round(Utils.ConvertKnotToKmPerHour(MaximumSpeed), 0)}" +
+                $"\t\tKapacitet:\t{MaximumPassengers} personer";
         }
 
         public override string TextToFile(int index)
         {
-            return base.TextToFile(index) + $"{Type};{DaysStaying};{DaysSinceArrival};{MaximumPassengers}";
+            return base.TextToFile(index) + $"{MaximumPassengers}";
         }
 
         public static void CreateRowingBoat(List<Boat> boats)
@@ -31,11 +33,10 @@ namespace Harbour
             int weight = Utils.r.Next(100, 300 + 1);
             int maxSpeed = Utils.r.Next(3 + 1);
             int daysStaying = 1;
-            int maxPassengers = Utils.r.Next(1, 6 + 1);
             int daysSinceArrival = 0;
+            int maxPassengers = Utils.r.Next(1, 6 + 1);
 
-            RowingBoat rowingBoat = new RowingBoat(id, weight, maxSpeed, daysStaying, daysSinceArrival, maxPassengers);
-            boats.Add(rowingBoat);
+            boats.Add(new RowingBoat(id, weight, maxSpeed, daysStaying, daysSinceArrival, maxPassengers));
         }
 
         public static (int, bool) FindRowingboatSpace(HarbourSpace[] harbour)
@@ -43,7 +44,7 @@ namespace Harbour
             int selectedSpace = 0;
             bool spaceFound = false;
 
-            //Hitta en plats med en rodd båt redan
+            //Hitta en plats med en roddbåt redan
             foreach (var space in harbour)
             {
                 foreach (var boat in space.ParkedBoats)
@@ -73,7 +74,7 @@ namespace Harbour
 
             if (spaceFound == false)
             {
-                // Hitta ensam plats med upptagna platser runtom
+                // Annars, hitta ensam plats med upptagna platser runtom
                 var q1 = harbour
                     .FirstOrDefault(h => h.ParkedBoats.Count == 0
                     && h.SpaceId > 0
@@ -90,7 +91,7 @@ namespace Harbour
 
             if (spaceFound == false)
             {
-                // Hitta första lediga plats
+                // Annars, hitta första lediga plats
                 var q2 = harbour
                    .FirstOrDefault(h => h.ParkedBoats.Count == 0);
 

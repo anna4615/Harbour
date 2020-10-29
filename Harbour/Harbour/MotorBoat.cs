@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Harbour
@@ -18,11 +19,12 @@ namespace Harbour
 
         public override string ToString()
         {
-            return $"{Type}\t{IdNumber}\t{Weight}\t{Program.ConvertToKmPerHour(MaximumSpeed)}\t\tMotoreffekt:\t{Power} hästkrafter";
+            return $"{Type}\t{IdNumber}\t{Weight}\t{Math.Round(Utils.ConvertKnotToKmPerHour(MaximumSpeed), 0)}" +
+                $"\t\tMotoreffekt:\t{Power} hästkrafter";
         }
         public override string TextToFile(int index)
         {
-            return base.TextToFile(index) + $"{Type};{DaysStaying};{DaysSinceArrival};{Power}";
+            return base.TextToFile(index) + $"{Power}";
         }
 
         public static void CreateMotorBoat(List<Boat> boats)
@@ -30,12 +32,11 @@ namespace Harbour
             string id = "M-" + GenerateID();
             int weight = Utils.r.Next(200, 3000 + 1);
             int maxSpeed = Utils.r.Next(60 + 1);
-            int power = Utils.r.Next(10, 1000 + 1);
             int daysStaying = 3;
             int daysSinceArrival = 0;
+            int power = Utils.r.Next(10, 1000 + 1);
 
-            MotorBoat motorBoat = new MotorBoat(id, weight, maxSpeed, daysStaying, daysSinceArrival, power);
-            boats.Add(motorBoat);
+            boats.Add(new MotorBoat(id, weight, maxSpeed, daysStaying, daysSinceArrival, power));
         }
 
         public static (int, bool) FindMotorBoatSpace(HarbourSpace[] harbour)
@@ -50,7 +51,7 @@ namespace Harbour
                 spaceFound = true;
             }
 
-            // Hitta ensam plats med upptagna platser runtom
+            // Annars, hitta ensam plats med upptagna platser runtom
             if (spaceFound == false)
             {
                 var q1 = harbour
@@ -67,7 +68,7 @@ namespace Harbour
                 }
             }
 
-            // Annars första lediga plats
+            // Annars, hitta första lediga plats
             if (spaceFound == false)
             {
                 var q2 = harbour
